@@ -133,4 +133,3 @@ start :-
    circumstances, a room may have more than one description. */
 
 describe(someplace) :- write('You are someplace.'), nl.
-
