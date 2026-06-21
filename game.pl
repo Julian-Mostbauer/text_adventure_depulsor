@@ -1,19 +1,3 @@
-/* Depulsor - a text adventure set in the desert town of Dustfall.
-   By <your name goes here>.
-
-   Adapted from the Matuszek/UPenn adventure template.
-
-   Goal (no spoilers): survive Dustfall, learn the truth about the
-   monster called Depulsor, and decide the town's fate.
-
-   Type   start.   to begin and to see the list of commands. */
-
-
-/* ----------------------------------------------------------------- */
-/* Dynamic facts: the knowledge base is modified at runtime with      */
-/* assert/retract as the player moves, takes things and solves puzzles.*/
-/* ----------------------------------------------------------------- */
-
 :- dynamic i_am_at/1, at/2, holding/1, water_level/1, lit/1, flag/1.
 
 :- retractall(i_am_at(_)),
@@ -24,25 +8,16 @@
    retractall(flag(_)).
 
 
-/* ----------------------------------------------------------------- */
-/* Initial world state.                                               */
-/* ----------------------------------------------------------------- */
+
+
+
 
 i_am_at(trade_road).
 
-/* The player starts with a half-full canteen. Water is the game's
-   limited resource (see consume_water/0 and refill/0). */
 water_level(3).
 
-/* Objects placed in the world at the start.
-   - The lantern is an INCOMPLETE object: it needs oil before it works.
-   - The ancient_component is a HIDDEN object, buried until you dig. */
 at(lantern, old_stable).
 
-
-/* ----------------------------------------------------------------- */
-/* The map. path(Here, Direction, There).                            */
-/* ----------------------------------------------------------------- */
 
 path(trade_road,          n,   main_street).
 path(main_street,         s,   trade_road).
@@ -68,8 +43,6 @@ path(old_stable,          n,   residential).
 path(deep_desert,         s,   collector_exterior).
 path(collector_exterior,  n,   deep_desert).
 
-/* The hatch into the machine. The path exists, but entry is locked
-   until you carry the access_key (see try_enter/2 - LOCKED DOOR puzzle). */
 path(collector_exterior,  in,  collector_interior).
 path(collector_interior,  out, collector_exterior).
 
@@ -77,7 +50,7 @@ path(collector_interior,  in,  control_room).
 path(control_room,        out, collector_interior).
 
 
-/* Desert rooms drain water on entry. Dark rooms need a lit lantern. */
+
 desert(deep_desert).
 desert(collector_exterior).
 
@@ -85,9 +58,9 @@ dark(collector_interior).
 dark(control_room).
 
 
-/* ----------------------------------------------------------------- */
-/* Picking up and dropping objects (from the template).              */
-/* ----------------------------------------------------------------- */
+
+
+
 
 take(X) :-
         holding(X),
@@ -120,10 +93,10 @@ drop(_) :-
         nl.
 
 
-/* ----------------------------------------------------------------- */
-/* Inventory (REQUIRED by the assignment).                           */
-/* Uses findall to build a LIST and prints it with RECURSION.        */
-/* ----------------------------------------------------------------- */
+
+
+
+
 
 inventory :-
         findall(X, holding(X), Things),
@@ -136,20 +109,14 @@ list_things([Thing | Rest]) :-
         write('  - '), write(Thing), nl,
         list_things(Rest).
 
-/* Short alias. */
+
 i :- inventory.
 
-/* have_all(+List) succeeds if you are holding every item in the list.
-   Recursive check over a list, reused by the win condition. */
 have_all([]).
 have_all([Item | Rest]) :-
         holding(Item),
         have_all(Rest).
 
-
-/* ----------------------------------------------------------------- */
-/* Movement.                                                         */
-/* ----------------------------------------------------------------- */
 
 n :- go(n).
 s :- go(s).
@@ -168,7 +135,7 @@ go(_) :-
         write('In diese Richtung kannst du nicht gehen.'), nl.
 
 
-/* LOCKED DOOR puzzle: the hatch into the machine needs the access_key. */
+
 try_enter(_, collector_interior) :-
         \+ holding(access_key),
         !,
@@ -180,9 +147,9 @@ try_enter(_, There) :-
         enter(There).
 
 
-/* enter/1 handles water, darkness and the actual move. */
 
-/* Walking into the desert with an empty canteen is fatal. */
+
+
 enter(There) :-
         desert(There),
         water_level(W),
@@ -194,7 +161,7 @@ enter(There) :-
         write('Deine Beine werden immer langsamer, bis sie endlich ausgeben. Das letzte das du siehst ist Sand, Sand und Sand.'), nl,
         die.
 
-/* Otherwise entering the desert costs one unit of water. */
+
 enter(There) :-
         desert(There),
         !,
@@ -213,7 +180,7 @@ move_to(There) :-
         look.
 
 
-/* Entering a dark room without a lit lantern is fatal. */
+
 dark_check(There) :-
         dark(There),
         \+ ( holding(lantern), lit(lantern) ),
@@ -226,9 +193,9 @@ dark_check(There) :-
 dark_check(_).
 
 
-/* ----------------------------------------------------------------- */
-/* LIMITED RESOURCE puzzle: water. Arithmetic counter.               */
-/* ----------------------------------------------------------------- */
+
+
+
 
 consume_water :-
         retract(water_level(W)),
@@ -242,7 +209,7 @@ report_water(W) :-
         write('(Deine Kantine ist fast leer - Du hast noch: '), write(W), write('.)'), nl.
 report_water(_).
 
-/* Refill the canteen at the town water tower. */
+
 refill :-
         i_am_at(water_tower),
         !,
@@ -253,9 +220,9 @@ refill :-
         write('Du findest hier kein Trinkwasser.'), nl.
 
 
-/* ----------------------------------------------------------------- */
-/* HIDDEN OBJECT puzzle: dig in the deep desert.                     */
-/* ----------------------------------------------------------------- */
+
+
+
 
 dig :-
         i_am_at(deep_desert),
@@ -279,11 +246,11 @@ dig :-
         write('Der Boden hier ist zu fest.'), nl.
 
 
-/* ----------------------------------------------------------------- */
-/* INCOMPLETE OBJECT puzzle: the lantern needs oil, then a light.    */
-/* ----------------------------------------------------------------- */
 
-/* Buy oil from the shopkeeper. */
+
+
+
+
 buy(oil) :-
         i_am_at(magic_shop),
         \+ holding(oil),
@@ -302,7 +269,7 @@ buy(_) :-
 buy(_) :-
         write('Hier kann man nix kaufen.'), nl.
 
-/* Fill the lantern with oil. */
+
 fill(lantern) :-
         holding(lantern),
         holding(oil),
@@ -319,7 +286,7 @@ fill(lantern) :-
 fill(_) :-
         write('Das kann man nicht auffüllen.'), nl.
 
-/* Light the (filled) lantern. */
+
 light(lantern) :-
         lit(lantern),
         !,
@@ -340,9 +307,9 @@ light(_) :-
         write('Das sollte man nicht anzünden.'), nl.
 
 
-/* ----------------------------------------------------------------- */
-/* Talking to the townsfolk. Hints, lore, and the key to the hatch.  */
-/* ----------------------------------------------------------------- */
+
+
+
 
 talk(sheriff) :-
         i_am_at(sheriff_office),
@@ -369,7 +336,7 @@ talk(bird_person) :-
         write('also sage ich, was sie nicht sagen werden: Dieses Ding ist kein Tier."'), nl,
         write('"Nimm die alte Lampe hier. Du wirst Licht brauchen, wo du hingehst."'), nl.
 
-/* The shopkeeper gives the access_key once you bring real proof. */
+
 talk(shopkeeper) :-
         i_am_at(magic_shop),
         holding(ancient_component),
@@ -400,11 +367,11 @@ talk(_) :-
         write('Gerade will Niemand mit dir reden.'), nl.
 
 
-/* ----------------------------------------------------------------- */
-/* The endings.                                                      */
-/* ----------------------------------------------------------------- */
 
-/* TRUE ENDING: deactivate the machine from the control room. */
+
+
+
+
 deactivate :-
         i_am_at(control_room),
         have_all([ancient_component]),
@@ -425,7 +392,7 @@ deactivate :-
 deactivate :-
         write('Hier kann man nichts deaktivieren.'), nl.
 
-/* FAILURE ENDING: a last stand against the machine. */
+
 fight :-
         i_am_at(collector_exterior),
         !,
@@ -438,9 +405,9 @@ fight :-
         write('Hier kannst du nicht kämpfen.'), nl.
 
 
-/* ----------------------------------------------------------------- */
-/* Looking around (from the template).                               */
-/* ----------------------------------------------------------------- */
+
+
+
 
 look :-
         i_am_at(Place),
@@ -456,9 +423,9 @@ notice_objects_at(Place) :-
 notice_objects_at(_).
 
 
-/* ----------------------------------------------------------------- */
-/* Death and game over (from the template).                          */
-/* ----------------------------------------------------------------- */
+
+
+
 
 die :-
         nl,
@@ -471,9 +438,9 @@ finish :-
         nl.
 
 
-/* ----------------------------------------------------------------- */
-/* Instructions and start.                                           */
-/* ----------------------------------------------------------------- */
+
+
+
 
 instructions :-
         nl,
@@ -534,9 +501,9 @@ start :-
         look.
 
 
-/* ----------------------------------------------------------------- */
-/* Room descriptions. A room may describe who and what is present.   */
-/* ----------------------------------------------------------------- */
+
+
+
 
 describe(trade_road) :-
         write('Du stehst auf der alten Handelsstraße am Rand von Dustfall, einer'), nl,
