@@ -1,10 +1,10 @@
-/* Depulsor Desolatio - a text adventure set in the desert town of Dustfall.
+/* Depulsor - a text adventure set in the desert town of Dustfall.
    By <your name goes here>.
 
    Adapted from the Matuszek/UPenn adventure template.
 
    Goal (no spoilers): survive Dustfall, learn the truth about the
-   monster called The Collector, and decide the town's fate.
+   monster called Depulsor, and decide the town's fate.
 
    Type   start.   to begin and to see the list of commands. */
 
@@ -348,26 +348,26 @@ talk(sheriff) :-
         i_am_at(sheriff_office),
         !,
         nl,
-        write('The sheriff does not look up. "Another wanderer. Listen -'), nl,
-        write('don''t go stirring up hope. We pay the tribute, we survive."'), nl,
-        write('"Fighting The Collector is how good people die. Leave it be."'), nl.
+        write('Der Sherif schaut nicht auf beim Sprechen. "Noch ein Abenteurer. Hör mir zu:'), nl,
+        write('verbreite keine falsche Hoffnung. Wir zahlen unseren Anteil und nur so können wir überleben."'), nl,
+        write('"Im Kampf gegen das Biest würden wir nur Leben verschwenden. Lass es einfach seihen."'), nl.
 
 talk(twins) :-
         i_am_at(residential),
         !,
         nl,
-        write('The twin girls eye you warily. "We''re not supposed to talk'), nl,
-        write('to strangers." Then one leans in: "But we heard it. Out past'), nl,
-        write('the road, in the deep dunes - a clinking under the sand.'), nl,
-        write('Like something buried. You should dig there."'), nl.
+        write('Die Zwillingsmädchen mustern dich misstrauisch. "Wir sollen nicht mit'), nl,
+        write('Fremden sprechen." Eines kommt etwas näher: "Aber wir haben es gehört.'), nl,
+        write('Tief in der Wüste - Ein Rauschen unter dem Sand.'), nl,
+        write('Irgendwas ist dort vergraben. Du solltest danach suchen."'), nl.
 
 talk(bird_person) :-
         i_am_at(old_stable),
         !,
         nl,
-        write('The bird-person folds a broken wing. "I am not of this town,'), nl,
-        write('so I will say what they won''t: that thing is no animal."'), nl,
-        write('"Take the old lantern here. You''ll want light where you''re going."'), nl.
+        write('Der Vogelmensch faltet einen gebrochenen Flügel. "Ich bin nicht aus dieser Stadt,"'), nl,
+        write('also sage ich, was sie nicht sagen werden: Dieses Ding ist kein Tier."'), nl,
+        write('"Nimm die alte Lampe hier. Du wirst Licht brauchen, wo du hingehst."'), nl.
 
 /* The shopkeeper gives the access_key once you bring real proof. */
 talk(shopkeeper) :-
@@ -377,27 +377,27 @@ talk(shopkeeper) :-
         !,
         assert(holding(access_key)),
         nl,
-        write('The shopkeeper''s eyes lock onto the component in your hands.'), nl,
-        write('"So. You found it. I was young when I last held a piece like that."'), nl,
-        write('They press an old iron key into your palm. "The beast has a hatch.'), nl,
-        write('This opens it. Get inside, find the core, and shut the thing down.'), nl,
-        write('Finish what I could not." (You received the access_key.)'), nl.
+        write('Der Ladenbesitzer starrt auf das Relikt in deinen Händen.'), nl,
+        write('"Also. Du hast es gefunden. Ich war jung, als ich das letzte Mal so ein Stück selbst halten durfte."'), nl,
+        write('Er drückt dir einen alten Eisenschlüssel in die Hand. "Das Biest hat eine Luke.'), nl,
+        write('Das öffnet sie. Geh rein, finde den Kern und schalte das Ding ab.'), nl,
+        write('Beende, was ich damals nicht konnte." (Du hast einen "access_key" erhalten.)'), nl.
 talk(shopkeeper) :-
         i_am_at(magic_shop),
         holding(access_key),
         !,
         nl,
-        write('"Why are you still here? The hatch is out past the dunes. Go."'), nl.
+        write('"Warum bist du noch hier? Das Monster ist draußen in der Wüste. Geh."'), nl.
 talk(shopkeeper) :-
         i_am_at(magic_shop),
         !,
         nl,
-        write('The shopkeeper grunts. "You want the truth? The desert keeps it."'), nl,
-        write('"Bring me something solid - dig out past the road - and I''ll talk."'), nl,
-        write('"And buy some oil while you''re here. You''ll need a lamp."'), nl.
+        write('Der Ladenbesitzer grunzt. "Du willst die Wahrheit? Die Wüste behält es."'), nl,
+        write('"Bring mir etwas Solides ... grabe hinter der Straße und ich rede."'), nl,
+        write('"Und kauf etwas Öl, solange du hier bist. Du brauchst eine Lampe."'), nl.
 
 talk(_) :-
-        write('There is no one like that to talk to here.'), nl.
+        write('Gerade will Niemand mit dir reden.'), nl.
 
 
 /* ----------------------------------------------------------------- */
@@ -410,32 +410,32 @@ deactivate :-
         have_all([ancient_component]),
         !,
         nl,
-        write('You seat the ancient component into the empty socket at the core.'), nl,
-        write('Centuries of blind routine stutter, slow, and fall silent.'), nl,
-        write('The Collector will not walk to Dustfall again.'), nl,
+        write('Du setzt das uralte Bauteil in die leere Stelle im Kern.'), nl,
+        write('Jahrhunderte blinder Routine stottern, verlangsamen und verstummen.'), nl,
+        write('Depulsor wird nie wieder nach Dustfall kommen.'), nl,
         nl,
-        write('*** YOU FREED DUSTFALL. The tribute is over. ***'), nl,
+        write('*** DU HAST DUSTFALL BEFREIT. Das Spiel ist vorbei. ***'), nl,
         finish.
 deactivate :-
         i_am_at(control_room),
         !,
         nl,
-        write('The control core has an empty socket - something belongs here.'), nl,
-        write('You need the component you dug out of the desert.'), nl.
+        write('Der Steuerkern hat eine leere Buchse ... irgendetwas gehört hierher.'), nl,
+        write('Du brauchst das Relikt, das du in der Wüste ausgegraben hast.'), nl.
 deactivate :-
-        write('There is nothing here to deactivate.'), nl.
+        write('Hier kann man nichts deaktivieren.'), nl.
 
 /* FAILURE ENDING: a last stand against the machine. */
 fight :-
         i_am_at(collector_exterior),
         !,
         nl,
-        write('You rally the townsfolk for a last stand against The Collector.'), nl,
-        write('Steel and spellfire break against its ancient hide. It does not'), nl,
-        write('even slow. Courage, it turns out, was never the missing piece.'), nl,
+        write('Du motivierst die Stadtbewohner zu einem letzten Widerstand gegen das Monster.'), nl,
+        write('Stahl und Zauberfeuer brallen gegen seine uralte Haut. Doch das verlangsamt'), nl,
+        write('die Maschine nicht mal. Mut, wie sich herausstellte, war nie das fehlende Puzzlestück.'), nl,
         die.
 fight :-
-        write('There is nothing here to fight.'), nl.
+        write('Hier kannst du nicht kämpfen.'), nl.
 
 
 /* ----------------------------------------------------------------- */
@@ -451,7 +451,7 @@ look :-
 
 notice_objects_at(Place) :-
         at(X, Place),
-        write('There is a '), write(X), write(' here.'), nl,
+        write('Hier siehst du einen '), write(X), nl,
         fail.
 notice_objects_at(_).
 
@@ -462,12 +462,12 @@ notice_objects_at(_).
 
 die :-
         nl,
-        write('*** The story ends here. ***'), nl,
+        write('*** Tod ***'), nl,
         finish.
 
 finish :-
         nl,
-        write('The game is over. Please enter the "halt." command.'),
+        write('Das Spiel ist vorbei. Beende das Program mit "halt."'),
         nl.
 
 
@@ -477,35 +477,59 @@ finish :-
 
 instructions :-
         nl,
-        write('Enter commands using standard Prolog syntax (end each with a "." ).'), nl,
-        write('Available commands are:'), nl,
-        write('start.              -- restart / show this overview again.'), nl,
-        write('n.  s.  e.  w.      -- move in that direction.'), nl,
-        write('in.  out.           -- enter or leave a structure.'), nl,
-        write('look.               -- look around you again.'), nl,
-        write('take(Object).       -- pick up an object.'), nl,
-        write('drop(Object).       -- put down an object.'), nl,
-        write('inventory.   (or i.)-- list what you are carrying.'), nl,
-        write('talk(Who).          -- talk to a townsperson.'), nl,
-        write('buy(Object).        -- buy something (at the shop).'), nl,
-        write('fill(lantern).      -- pour oil into the lantern.'), nl,
-        write('light(lantern).     -- light a filled lantern.'), nl,
-        write('dig.                -- dig at your feet.'), nl,
-        write('refill.             -- refill your canteen (at the water tower).'), nl,
-        write('deactivate.         -- shut the machine down (from its core).'), nl,
-        write('fight.              -- make a stand against The Collector.'), nl,
-        write('instructions.       -- see this message again.'), nl,
-        write('halt.               -- quit the game.'), nl,
+        write('Gib Befehle in normaler Prolog-Syntax ein (jeden Befehl mit einem "." abschließen).'), nl,
+        write('Verfügbare Befehle sind:'), nl,
+        write('start.              -- Spiel neu starten / diese Übersicht erneut anzeigen.'), nl,
+        write('n.  s.  e.  w.      -- in diese Richtung gehen.'), nl,
+        write('in.  out.           -- ein Gebäude oder eine Struktur betreten bzw. verlassen.'), nl,
+        write('look.               -- die Umgebung erneut betrachten.'), nl,
+        write('take(Object).       -- einen Gegenstand aufheben.'), nl,
+        write('drop(Object).       -- einen Gegenstand ablegen.'), nl,
+        write('inventory.   (or i.)-- zeigen, was du bei dir trägst.'), nl,
+        write('talk(Who).          -- mit einem Dorfbewohner sprechen.'), nl,
+        write('buy(Object).        -- etwas kaufen (im Laden).'), nl,
+        write('fill(lantern).      -- Öl in die Laterne füllen.'), nl,
+        write('light(lantern).     -- eine gefüllte Laterne anzünden.'), nl,
+        write('dig.                -- an deiner aktuellen Position graben.'), nl,
+        write('refill.             -- die Feldflasche auffüllen (am Wasserturm).'), nl,
+        write('deactivate.         -- die Maschine abschalten (vom Kern aus).'), nl,
+        write('fight.              -- dich Depulsor entgegenstellen.'), nl,
+        write('instructions.       -- diese Hilfe erneut anzeigen.'), nl,
+        write('halt.               -- das Spiel beenden.'), nl,
         nl.
+
 
 start :-
         nl,
-        write('     ,---.       ,---.'), nl,
-        write('    ( o   )-----( o   )    ~ D E P U L S O R   D E S O L A T I O ~'), nl,
-        write('     )   (       )   (       a Prolog text adventure'), nl,
-        write('   __|___________|___|__'), nl,
-        write('  (      the dunes       )'), nl,
-        write('   ~~~~~~~~~~~~~~~~~~~~~~~'), nl,
+        write('                         MMMMMMM                     MMMMMMMMMMMMMM'), nl,
+        write('                      MMMMMMMMMMMM                MMMMMMMMMMMMMMMMMMM'), nl,
+        write('                    MMMMMMMMMMMMMMMM                MMMMMMMMMMMMMMMMM'), nl,
+        write('               MMMMMMMMMMMMMMMMMMMMMM              MMMMMMMMMMMMM   MM'), nl,
+        write('            MMMMMMMMMMMMMMMMMMMMMMMMMMM            MMMMMMMMMMM'), nl,
+        write('          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM        MMMMMMMMMMMM'), nl,
+        write('        MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM    MMMMMMMMMMMMM'), nl,
+        write('        MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('       MMMMMMMMMMMMM    DEPULSOR    MMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('       MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('      MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'), nl,
+        write('    MMMMMMMM  MMMMMMMM  MMMMMMMMMMMMMMMMMMMM'), nl,
+        write('   MMMMM  M   MMMMMMM       MNMMMMMMMMMMMMMM'), nl,
+        write(' MMMMM  MMMM  MMMMMM          MMMMM  MMMMMM'), nl,
+        write('MMMMMM  MMM  MMMMMM           MMMMM   MMMMM'), nl,
+        write('MMMMM     M  MMMMM            MMMM     MMMM'), nl,
+        write('MMMM        MMMMM           MMMMMM      MMMMM'), nl,
+        write(' MMM       MMMMMMM          NMMMMM      MMMMM'), nl,
+        write(' MM         MMMM             MMMM         MMM'), nl,
+        write('MMMM         MMMM           MMMM           MM'), nl,
+        write(' MMM          MMM           MMM            MMM'), nl,
+        write(' MMMM         MMMM         MMM              MMM'), nl,
+        write(' MMMMM         MMM        MMMM               MMM'), nl,
+        write('   MMMMMM      MMMM        MMMM              MMMMMM'), nl,
+        write('      MMM       MMMMM       MMMM              MMMMMM'), nl,
+        write('                  MMMMMM                        MMMMM'), nl,
+        write('                    MMMMM'), nl,
         instructions,
         look.
 
@@ -515,49 +539,59 @@ start :-
 /* ----------------------------------------------------------------- */
 
 describe(trade_road) :-
-        write('You stand on the old trade road at the edge of Dustfall, a tired'), nl,
-        write('frontier town hemmed in by endless dunes. The desert lies south;'), nl,
-        write('the town''s main street is north.'), nl.
+        write('Du stehst auf der alten Handelsstraße am Rand von Dustfall, einer'), nl,
+        write('erschöpften Grenzstadt, die von endlosen Dünen umgeben ist. Die'), nl,
+        write('Wüste erstreckt sich im Süden, die Hauptstraße der Stadt liegt im Norden.'), nl.
 
 describe(main_street) :-
-        write('Main Street. Dirt road, weathered wood and stone buildings. People'), nl,
-        write('move quietly, bracing for the next tribute. The magic shop is west,'), nl,
-        write('the sheriff''s office east, the water tower north, the road south.'), nl.
+        write('Die Hauptstraße. Eine staubige Straße, gesäumt von verwitterten Holz-'), nl,
+        write('und Steingebäuden. Die Menschen bewegen sich schweigend und erwarten'), nl,
+        write('bereits den nächsten Tribut. Der Magieladen liegt im Westen, das'), nl,
+        write('Sheriffbüro im Osten, der Wasserturm im Norden und die Straße im Süden.'), nl.
 
 describe(magic_shop) :-
-        write('A cramped magic shop, shelves thick with dust. The elderly shopkeeper'), nl,
-        write('watches you from behind the counter. Main Street is east.'), nl.
+        write('Ein beengter Magieladen, dessen Regale von einer dicken Staubschicht'), nl,
+        write('bedeckt sind. Der betagte Ladenbesitzer beobachtet dich hinter dem'), nl,
+        write('Tresen. Die Hauptstraße liegt im Osten.'), nl.
 
 describe(sheriff_office) :-
-        write('The sheriff''s office. A worn desk, a rack of unused rifles. The'), nl,
-        write('sheriff sits here, grim and unmoving. Main Street is west.'), nl.
+        write('Das Büro des Sheriffs. Ein abgenutzter Schreibtisch und ein Gestell'), nl,
+        write('mit unbenutzten Gewehren stehen hier. Der Sheriff sitzt regungslos'), nl,
+        write('an seinem Platz. Die Hauptstraße liegt im Westen.'), nl.
 
 describe(water_tower) :-
-        write('The town water tower, Dustfall''s most guarded treasure. You could'), nl,
-        write('refill a canteen here. Main Street is south, the homes lie west.'), nl.
+        write('Der Wasserturm der Stadt, Dustfalls am strengsten bewachter Schatz.'), nl,
+        write('Hier könntest du eine Feldflasche auffüllen. Die Hauptstraße liegt'), nl,
+        write('im Süden, die Wohnhäuser im Westen.'), nl.
 
 describe(residential) :-
-        write('The residential quarter - patched-up houses passed down for'), nl,
-        write('generations. Two young twin girls watch you from a doorway.'), nl,
-        write('The water tower is east, the old stable south.'), nl.
+        write('Das Wohnviertel mit notdürftig instand gehaltenen Häusern, die seit'), nl,
+        write('Generationen weitergegeben werden. Zwei junge Zwillingsmädchen'), nl,
+        write('beobachten dich aus einer Türöffnung.'), nl,
+        write('Der Wasserturm liegt im Osten, der alte Stall im Süden.'), nl.
 
 describe(old_stable) :-
-        write('The old stable, half-abandoned, smelling of straw and rust. A'), nl,
-        write('stranded bird-person rests in the corner. The quarter is north.'), nl.
+        write('Der alte Stall, halb verlassen und erfüllt vom Geruch nach Stroh'), nl,
+        write('und Rost. In einer Ecke ruht eine gestrandete Vogelperson. Das'), nl,
+        write('Wohnviertel liegt im Norden.'), nl.
 
 describe(deep_desert) :-
-        write('The deep desert. Wind claws at the dunes and reshapes them by the'), nl,
-        write('hour. The town is north; something dark looms further south.'), nl.
+        write('Die tiefe Wüste. Der Wind krallt sich in die Dünen und formt sie'), nl,
+        write('von Stunde zu Stunde neu. Die Stadt liegt im Norden; weiter südlich'), nl,
+        write('zeichnet sich eine dunkle Silhouette ab.'), nl.
 
 describe(collector_exterior) :-
-        write('You stand beneath The Collector - a mountain of crusted hide and'), nl,
-        write('sediment, vast as a hill. An iron hatch sits low in its flank.'), nl,
-        write('The desert is north; the way in is, well, in.'), nl.
+        write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
+        write('Haut und Sediment, groß wie ein Hügel. Tief an seiner Flanke befindet'), nl,
+        write('sich eine eiserne Luke.'), nl,
+        write('Die Wüste liegt im Norden; der Weg hinein führt, nun ja, nach in.'), nl.
 
 describe(collector_interior) :-
-        write('Inside the machine. Ancient mechanisms turn in the gloom, untouched'), nl,
-        write('by the centuries. A narrow passage leads further in; the hatch is out.'), nl.
+        write('Im Inneren der Maschine. Uralte Mechanismen arbeiten in der Dunkelheit'), nl,
+        write('weiter, unberührt von den Jahrhunderten. Ein schmaler Gang führt'), nl,
+        write('tiefer hinein; die Luke liegt out.'), nl.
 
 describe(control_room) :-
-        write('The control core - a silent chamber of strange instruments still'), nl,
-        write('faintly alive. At its center, a single empty socket waits. (out leads back.)'), nl.
+        write('Der Kontrollkern, eine stille Kammer voller fremdartiger Instrumente,'), nl,
+        write('die noch immer schwach leben. Im Zentrum wartet eine einzelne leere'), nl,
+        write('Fassung. (out führt zurück.)'), nl.
