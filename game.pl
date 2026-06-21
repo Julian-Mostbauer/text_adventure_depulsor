@@ -91,7 +91,7 @@ dark(control_room).
 
 take(X) :-
         holding(X),
-        write('You''re already carrying it!'),
+        write('Das hast du schon aufgehoben!'),
         !, nl.
 
 take(X) :-
@@ -103,7 +103,7 @@ take(X) :-
         !, nl.
 
 take(_) :-
-        write('I don''t see it here.'),
+        write('Das gibt es hier nicht.'),
         nl.
 
 
@@ -116,7 +116,7 @@ drop(X) :-
         !, nl.
 
 drop(_) :-
-        write('You aren''t carrying it!'),
+        write('Das Item hast du nicht!'),
         nl.
 
 
@@ -128,8 +128,8 @@ drop(_) :-
 inventory :-
         findall(X, holding(X), Things),
         ( Things == []
-        -> write('You are carrying nothing.'), nl
-        ;  write('You are carrying:'), nl, list_things(Things) ).
+        -> write('Dein Inventar ist leer'), nl
+        ;  write('Dein Inventar beinhaltet:'), nl, list_things(Things) ).
 
 list_things([]).
 list_things([Thing | Rest]) :-
@@ -165,7 +165,7 @@ go(Direction) :-
         !.
 
 go(_) :-
-        write('You can''t go that way.'), nl.
+        write('In diese Richtung kannst du nicht gehen.'), nl.
 
 
 /* LOCKED DOOR puzzle: the hatch into the machine needs the access_key. */
@@ -173,8 +173,8 @@ try_enter(_, collector_interior) :-
         \+ holding(access_key),
         !,
         nl,
-        write('A massive iron hatch is sealed in the beast''s flank.'), nl,
-        write('It will not budge. You sense it needs a key of some kind.'), nl.
+        write('In der Flanke des Biests befindet sich eine massive, fest verschlossene Eisenluke.'), nl,
+        write('Es lässt sich nicht öffnen. Du brauchst warscheinlich einen Schlüssel.'), nl.
 
 try_enter(_, There) :-
         enter(There).
@@ -190,8 +190,8 @@ enter(There) :-
         !,
         move_to(There),
         nl,
-        write('Your canteen is bone dry and the sun hammers down.'), nl,
-        write('Your steps falter, the dunes tilt, and the sand rises to meet you.'), nl,
+        write('Deine Kantine ist komplett ausgetrocknet und die Sonne kocht dich well-done.'), nl,
+        write('Deine Beine werden immer langsamer, bis sie endlich ausgeben. Das letzte das du siehst ist Sand, Sand und Sand.'), nl,
         die.
 
 /* Otherwise entering the desert costs one unit of water. */
@@ -219,8 +219,8 @@ dark_check(There) :-
         \+ ( holding(lantern), lit(lantern) ),
         !,
         nl,
-        write('It is pitch black inside the machine. You grope blindly'), nl,
-        write('through grinding mechanisms - and something vast closes around you.'), nl,
+        write('Es ist stockfinster in der Maschine. Du stolperst blind herum.'), nl,
+        write('Du steigst auf etwas das leise Nachgibt, bis du plötzlich einen lauten Knall über dir hörst.'), nl,
         die.
 
 dark_check(_).
@@ -239,7 +239,7 @@ consume_water :-
 report_water(W) :-
         W =< 1,
         !,
-        write('(Your canteen is nearly empty - water left: '), write(W), write('.)'), nl.
+        write('(Deine Kantine ist fast leer - Du hast noch: '), write(W), write('.)'), nl.
 report_water(_).
 
 /* Refill the canteen at the town water tower. */
@@ -248,9 +248,9 @@ refill :-
         !,
         retract(water_level(_)),
         assert(water_level(5)),
-        write('You haul up a bucket and fill your canteen to the brim. (Water: 5)'), nl.
+        write('Du füllst deine Kantine bis kein Tropfen mehr rein passt. (Water: 5)'), nl.
 refill :-
-        write('There is no clean water to be had here.'), nl.
+        write('Du findest hier kein Trinkwasser.'), nl.
 
 
 /* ----------------------------------------------------------------- */
@@ -264,19 +264,19 @@ dig :-
         assert(flag(dug)),
         assert(at(ancient_component, deep_desert)),
         nl,
-        write('You dig where the wind has scoured the dune away.'), nl,
-        write('Your fingers strike cold metal - a strange ribbed component,'), nl,
-        write('half relic, half machine. Proof the monster was never alive.'), nl,
-        write('There is a ancient_component here.'), nl.
+        write('Du gräbst dort, wo der Wind die Düne weggetragen hat.'), nl,
+        write('Mit deinen Fingern fühlst du etwas metallisches: ein seltsames altes Maschinenteil,'), nl,
+        write('Relikt und Maschine zugleich. Beweis, dass das Monster nie lebendig war.'), nl,
+        write('Du hast einen "ancient_component" for dir.'), nl.
 
 dig :-
         i_am_at(deep_desert),
         flag(dug),
         !,
-        write('You have already dug this spot bare.'), nl.
+        write('Es gibt hier nix mehr zum ausgraben'), nl.
 
 dig :-
-        write('The ground here is packed too hard to dig.'), nl.
+        write('Der Boden hier ist zu fest.'), nl.
 
 
 /* ----------------------------------------------------------------- */
@@ -289,18 +289,18 @@ buy(oil) :-
         \+ holding(oil),
         !,
         assert(holding(oil)),
-        write('The cranky shopkeeper slides a flask of lamp oil across the'), nl,
-        write('counter. "Don''t waste it. It''s the last I have."'), nl.
+        write('Der Ladenbesitzer schiebt eine Flasche Lampenöl über den'), nl,
+        write('Bartresen. "Verschwende es nicht. Das war meine letzte Reserve."'), nl.
 buy(oil) :-
         holding(oil),
         !,
-        write('You have already bought the oil.'), nl.
+        write('Das war mein letztes Öl. Mehr habe ich nicht!'), nl.
 buy(_) :-
         i_am_at(magic_shop),
         !,
-        write('The shopkeeper has nothing like that for sale.'), nl.
+        write('Das verkaufe ich hier nicht.'), nl.
 buy(_) :-
-        write('There is no shop here.'), nl.
+        write('Hier kann man nix kaufen.'), nl.
 
 /* Fill the lantern with oil. */
 fill(lantern) :-
@@ -309,35 +309,35 @@ fill(lantern) :-
         !,
         retract(holding(oil)),
         assert(flag(lantern_filled)),
-        write('You pour the oil into the lantern. It is ready to be lit.'), nl.
+        write('Du füllst die Lampe mit Öl auf. Sie kann jetzt angezündet werden.'), nl.
 fill(lantern) :-
         \+ holding(lantern),
         !,
-        write('You have no lantern to fill.'), nl.
+        write('Du hast keine Lampe.'), nl.
 fill(lantern) :-
-        write('You have nothing to fill it with. You need oil.'), nl.
+        write('Du brauchst Öl um die Lampe aufzufüllen.'), nl.
 fill(_) :-
-        write('You can''t fill that.'), nl.
+        write('Das kann man nicht auffüllen.'), nl.
 
 /* Light the (filled) lantern. */
 light(lantern) :-
         lit(lantern),
         !,
-        write('The lantern is already burning.'), nl.
+        write('Die Lampe brennt schon.'), nl.
 light(lantern) :-
         holding(lantern),
         flag(lantern_filled),
         !,
         assert(lit(lantern)),
-        write('The lantern flares to life, throwing warm light around you.'), nl.
+        write('Die Lampe fängt an zu brennen, du kannst ihre Wärme in deinen Händen fühlen.'), nl.
 light(lantern) :-
         holding(lantern),
         !,
-        write('The lantern is empty. It needs oil before it will light.'), nl.
+        write('Die Lampe hat kein Öl und kann nicht angezündet werden.'), nl.
 light(lantern) :-
-        write('You have no lantern.'), nl.
+        write('Du hast keine Lampe.'), nl.
 light(_) :-
-        write('You can''t light that.'), nl.
+        write('Das sollte man nicht anzünden.'), nl.
 
 
 /* ----------------------------------------------------------------- */
