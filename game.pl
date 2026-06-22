@@ -237,7 +237,7 @@ dig :-
         write('Du gräbst dort, wo der Wind die Düne weggetragen hat.'), nl,
         write('Mit deinen Fingern fühlst du etwas metallisches: ein seltsames altes Maschinenteil,'), nl,
         write('Relikt und Maschine zugleich. Beweis, dass das Monster nie lebendig war.'), nl,
-        write('Du hast einen "ancient_component" for dir.'), nl.
+        write('Du hast einen "ancient_component" vor dir.'), nl.
 
 dig :-
         i_am_at(deep_desert),
@@ -401,7 +401,7 @@ fight :-
         !,
         nl,
         write('Du motivierst die Stadtbewohner zu einem letzten Widerstand gegen das Monster.'), nl,
-        write('Stahl und Zauberfeuer brallen gegen seine uralte Haut. Doch das verlangsamt'), nl,
+        write('Stahl und Zauberfeuer prallen gegen seine uralte Haut. Doch das verlangsamt'), nl,
         write('die Maschine nicht mal. Mut, wie sich herausstellte, war nie das fehlende Puzzlestück.'), nl,
         die.
 fight :-
@@ -562,7 +562,13 @@ describe(collector_exterior) :-
         write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
         write('Haut und Sediment, groß wie ein Hügel. Tief an seiner Flanke befindet'), nl,
         write('sich eine eiserne Luke — dein Schlüssel passt genau hinein.'), nl,
-        write('Die Wüste liegt im Norden; die Luke führt nach in.'), nl.
+        write('Die Wüste liegt im Norden; die Luke führt nach in.'), nl,
+        ( \+ holding(lantern)
+		->  write('(In der Luke ist es dunkel, du brauchst vielleicht eine Laterne.)'), nl
+		; \+ lit(lantern)
+		->  write('(In der Luke ist es dunkel, zünde zuerst deine Laterne an.)'), nl
+		; true
+		).
 
 describe(collector_exterior) :-
         write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
@@ -571,11 +577,12 @@ describe(collector_exterior) :-
         write('Die Wüste liegt im Norden.'), nl.
 
 describe(collector_interior) :-
-        write('Im Inneren der Maschine. Uralte Mechanismen arbeiten in der Dunkelheit'), nl,
-        write('weiter, unberührt von den Jahrhunderten. Ein schmaler Gang führt'), nl,
+        write('Du betrittst das Innere der Maschine. Uralte Mechanismen erleuchten'), nl,
+        write('durch deine Laterne, unberührt von den Jahrhunderten. Ein schmaler Gang führt'), nl,
         write('tiefer hinein; die Luke liegt out.'), nl.
 
 describe(control_room) :-
         write('Der Kontrollkern, eine stille Kammer voller fremdartiger Instrumente,'), nl,
         write('die noch immer schwach leben. Im Zentrum wartet eine einzelne leere'), nl,
-        write('Fassung. (out führt zurück.)'), nl.
+        write('Fassung. Die Form ähnelt dem Relikt, das du in der Wüste ausgegraben hast.'), nl,
+        write('(out führt zurück.)'), nl.
