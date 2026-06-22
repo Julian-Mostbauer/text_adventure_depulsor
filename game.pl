@@ -72,7 +72,10 @@ take(X) :-
         at(X, Place),
         retract(at(X, Place)),
         assert(holding(X)),
-        write('OK.'),
+        write('OK.'), nl,
+        ( member(X, [lantern, ancient_component])
+        -> write('Neue Befehle sind jetzt verfügbar. (Gib "instructions." für Details ein.)'), nl
+        ;  true ),
         !, nl.
 
 take(_) :-
@@ -360,7 +363,7 @@ talk(shopkeeper) :-
         !,
         nl,
         write('Der Ladenbesitzer grunzt. "Du willst die Wahrheit? Die Wüste behält es."'), nl,
-        write('"Bring mir etwas Solides ... grabe hinter der Straße und ich rede."'), nl,
+        write('"Bring mir etwas Solides und du erfährst, was du wissen willst."'), nl,
         write('"Und kauf etwas Öl, solange du hier bist. Du brauchst eine Lampe."'), nl.
 
 talk(_) :-
