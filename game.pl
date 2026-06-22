@@ -140,8 +140,7 @@ try_enter(_, collector_interior) :-
         \+ holding(access_key),
         !,
         nl,
-        write('In der Flanke des Biests befindet sich eine massive, fest verschlossene Eisenluke.'), nl,
-        write('Es lässt sich nicht öffnen. Du brauchst warscheinlich einen Schlüssel.'), nl.
+        write('Hier gibt es keinen Weg hinein.'), nl.
 
 try_enter(_, There) :-
         enter(There).
@@ -165,6 +164,7 @@ enter(There) :-
 enter(There) :-
         desert(There),
         !,
+        write('Du nimmst einen Schluck aus deiner Kantine.'), nl,
         consume_water,
         move_to(There),
         dark_check(There).
@@ -455,11 +455,17 @@ instructions :-
         write('inventory.   (or i.)-- zeigen, was du bei dir trägst.'), nl,
         write('talk(Who).          -- mit einem Dorfbewohner sprechen.'), nl,
         write('buy(Object).        -- etwas kaufen (im Laden).'), nl,
-        write('fill(lantern).      -- Öl in die Laterne füllen.'), nl,
-        write('light(lantern).     -- eine gefüllte Laterne anzünden.'), nl,
-        write('dig.                -- an deiner aktuellen Position graben.'), nl,
+        ( holding(lantern)
+        -> write('fill(lantern).      -- Öl in die Laterne füllen.'), nl,
+           write('light(lantern).     -- eine gefüllte Laterne anzünden.'), nl
+        ;  true ),
+        ( \+ flag(dug)
+        -> write('dig.                -- an deiner aktuellen Position graben.'), nl
+        ;  true ),
         write('refill.             -- die Feldflasche auffüllen (am Wasserturm).'), nl,
-        write('deactivate.         -- die Maschine abschalten (vom Kern aus).'), nl,
+        ( holding(ancient_component)
+        -> write('deactivate.         -- die Maschine abschalten (vom Kern aus).'), nl
+        ;  true ),
         write('fight.              -- dich Depulsor entgegenstellen.'), nl,
         write('instructions.       -- diese Hilfe erneut anzeigen.'), nl,
         write('halt.               -- das Spiel beenden.'), nl,
@@ -548,10 +554,18 @@ describe(deep_desert) :-
         write('zeichnet sich eine dunkle Silhouette ab.'), nl.
 
 describe(collector_exterior) :-
+        holding(access_key),
+        !,
         write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
         write('Haut und Sediment, groß wie ein Hügel. Tief an seiner Flanke befindet'), nl,
-        write('sich eine eiserne Luke.'), nl,
-        write('Die Wüste liegt im Norden; der Weg hinein führt, nun ja, nach in.'), nl.
+        write('sich eine eiserne Luke — dein Schlüssel passt genau hinein.'), nl,
+        write('Die Wüste liegt im Norden; die Luke führt nach in.'), nl.
+
+describe(collector_exterior) :-
+        write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
+        write('Haut und Sediment, groß wie ein Hügel. Die Oberfläche ist'), nl,
+        write('dicht mit Schichten aus Rost und erstarrtem Sediment bedeckt.'), nl,
+        write('Die Wüste liegt im Norden.'), nl.
 
 describe(collector_interior) :-
         write('Im Inneren der Maschine. Uralte Mechanismen arbeiten in der Dunkelheit'), nl,
