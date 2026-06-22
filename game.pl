@@ -105,7 +105,9 @@ inventory :-
         findall(X, holding(X), Things),
         ( Things == []
         -> write('Dein Inventar ist leer'), nl
-        ;  write('Dein Inventar beinhaltet:'), nl, list_things(Things) ).
+        ;  write('Dein Inventar beinhaltet:'), nl, list_things(Things) ),
+        water_level(W),
+        write('Wasser in deiner Kantine: '), write(W), nl.
 
 list_things([]).
 list_things([Thing | Rest]) :-
@@ -506,6 +508,15 @@ start :-
         write('      MMM       MMMMM       MMMM              MMMMMM'), nl,
         write('                  MMMMMM                        MMMMM'), nl,
         write('                    MMMMM'), nl,
+        nl,
+        write('Du bist ein Fremder, gerade erst in Dustfall angekommen. Seit'), nl,
+        write('Generationen erhebt sich einmal im Monat ein gewaltiges Ungetüm'), nl,
+        write('aus der Wüste — Depulsor — und fordert seinen Tribut: Nahrung,'), nl,
+        write('Vieh, Werkzeug. Wer sich weigert, wird vernichtet. Doch die'), nl,
+        write('Vorräte der Stadt sind fast erschöpft; zahlt sie erneut, verhungert'), nl,
+        write('sie. Niemand glaubt mehr an Rettung. Vielleicht findest du heraus,'), nl,
+        write('was das Monster wirklich ist — und wie man es aufhalten kann.'), nl,
+        nl,
         instructions,
         look.
 
@@ -553,8 +564,10 @@ describe(old_stable) :-
 
 describe(deep_desert) :-
         write('Die tiefe Wüste. Der Wind krallt sich in die Dünen und formt sie'), nl,
-        write('von Stunde zu Stunde neu. Die Stadt liegt im Norden; weiter südlich'), nl,
-        write('zeichnet sich eine dunkle Silhouette ab.'), nl.
+        write('von Stunde zu Stunde neu. Unter dem Sand glaubst du ein leises'), nl,
+        write('Rauschen zu hören — alte Geschichten sagen, hier liege etwas'), nl,
+        write('begraben. Die Stadt liegt im Norden; weiter südlich zeichnet sich'), nl,
+        write('eine dunkle Silhouette ab.'), nl.
 
 describe(collector_exterior) :-
         holding(access_key),
@@ -578,8 +591,10 @@ describe(collector_exterior) :-
 
 describe(collector_interior) :-
         write('Du betrittst das Innere der Maschine. Uralte Mechanismen erleuchten'), nl,
-        write('durch deine Laterne, unberührt von den Jahrhunderten. Ein schmaler Gang führt'), nl,
-        write('tiefer hinein; die Luke liegt out.'), nl.
+        write('durch deine Laterne, unberührt von den Jahrhunderten. Verblasste'), nl,
+        write('Zeichen einer Zivilisation, die längst verschwunden ist, bedecken'), nl,
+        write('die Wände — Depulsor sammelt noch immer für eine Welt, die es nicht'), nl,
+        write('mehr gibt. Ein schmaler Gang führt tiefer hinein; die Luke liegt out.'), nl.
 
 describe(control_room) :-
         write('Der Kontrollkern, eine stille Kammer voller fremdartiger Instrumente,'), nl,
