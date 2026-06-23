@@ -116,7 +116,7 @@ inventory :-
 
 list_things([]).
 list_things([Thing | Rest]) :-
-        write('  - '), write(Thing), nl,
+        write('  - "'), write(Thing), write('"'), nl,
         list_things(Rest).
 
 
@@ -280,13 +280,13 @@ buy(oil) :-
         \+ holding(oil),
         !,
         assert(holding(oil)),
-        write('Der Ladenbesitzer schiebt eine Flasche Lampenöl über den'), nl,
+        write('Der Ladenbesitzer schiebt eine Flasche "oil" über den'), nl,
         write('Bartresen. "Verschwende es nicht. Das war meine letzte Reserve."'), nl,
         increment_steps.
 buy(oil) :-
         holding(oil),
         !,
-        write('Das war mein letztes Öl. Mehr habe ich nicht!'), nl.
+        write('Das war mein letztes "oil". Mehr habe ich nicht!'), nl.
 buy(_) :-
         i_am_at(magic_shop),
         !,
@@ -301,14 +301,14 @@ fill(lantern) :-
         !,
         retract(holding(oil)),
         assert(flag(lantern_filled)),
-        write('Du füllst die Lampe mit Öl auf. Sie kann jetzt angezündet werden.'), nl,
+        write('Du füllst die "lantern" mit "oil" auf. Sie kann jetzt angezündet werden.'), nl,
         increment_steps.
 fill(lantern) :-
         \+ holding(lantern),
         !,
-        write('Du hast keine Lampe.'), nl.
+        write('Du hast keine "lantern".'), nl.
 fill(lantern) :-
-        write('Du brauchst Öl um die Lampe aufzufüllen.'), nl.
+        write('Du brauchst "oil" um die "lantern" aufzufüllen.'), nl.
 fill(_) :-
         write('Das kann man nicht auffüllen.'), nl.
 
@@ -316,20 +316,20 @@ fill(_) :-
 light(lantern) :-
         lit(lantern),
         !,
-        write('Die Lampe brennt schon.'), nl.
+        write('Die "lantern" brennt schon.'), nl.
 light(lantern) :-
         holding(lantern),
         flag(lantern_filled),
         !,
         assert(lit(lantern)),
-        write('Die Lampe fängt an zu brennen, du kannst ihre Wärme in deinen Händen fühlen.'), nl,
+        write('Die "lantern" fängt an zu brennen, du kannst ihre Wärme in deinen Händen fühlen.'), nl,
         increment_steps.
 light(lantern) :-
         holding(lantern),
         !,
-        write('Die Lampe hat kein Öl und kann nicht angezündet werden.'), nl.
+        write('Die "lantern" hat kein "oil" und kann nicht angezündet werden.'), nl.
 light(lantern) :-
-        write('Du hast keine Lampe.'), nl.
+        write('Du hast keine "lantern".'), nl.
 light(_) :-
         write('Das sollte man nicht anzünden.'), nl.
 
@@ -363,7 +363,7 @@ talk(bird_person) :-
         nl,
         write('Der Vogelmensch faltet einen gebrochenen Flügel. "Ich bin nicht aus dieser Stadt,"'), nl,
         write('also sage ich, was sie nicht sagen werden: Dieses Ding ist kein Tier."'), nl,
-        write('"Nimm die alte Lampe hier. Du wirst Licht brauchen, wo du hingehst."'), nl,
+        write('"Nimm die alte "lantern" hier. Du wirst Licht brauchen, wo du hingehst."'), nl,
         increment_steps.
 
 
@@ -374,9 +374,9 @@ talk(shopkeeper) :-
         !,
         assert(holding(access_key)),
         nl,
-        write('Der Ladenbesitzer starrt auf das Relikt in deinen Händen.'), nl,
+        write('Der Ladenbesitzer starrt auf das "ancient_component" in deinen Händen.'), nl,
         write('"Also. Du hast es gefunden. Ich war jung, als ich das letzte Mal so ein Stück selbst halten durfte."'), nl,
-        write('Er drückt dir einen alten Eisenschlüssel in die Hand. "Das Biest hat eine Luke.'), nl,
+        write('Er drückt dir einen alten "access_key" in die Hand. "Das Biest hat eine Luke.'), nl,
         write('Das öffnet sie. Geh rein, finde den Kern und schalte das Ding ab.'), nl,
         write('Beende, was ich damals nicht konnte." (Du hast einen "access_key" erhalten.)'), nl,
         increment_steps.
@@ -393,7 +393,7 @@ talk(shopkeeper) :-
         nl,
         write('Der Ladenbesitzer grunzt. "Du willst die Wahrheit? Die Wüste behält es."'), nl,
         write('"Bring mir etwas Solides und du erfährst, was du wissen willst."'), nl,
-        write('"Und kauf etwas Öl, solange du hier bist. Du brauchst eine Lampe."'), nl,
+        write('"Und kauf etwas "oil", solange du hier bist. Du brauchst eine "lantern"."'), nl,
         increment_steps.
 
 talk(_) :-
@@ -410,7 +410,7 @@ deactivate :-
         have_all([ancient_component]),
         !,
         nl,
-        write('Du setzt das uralte Bauteil in die leere Stelle im Kern.'), nl,
+        write('Du setzt das "ancient_component" in die leere Stelle im Kern.'), nl,
         write('Jahrhunderte blinder Routine stottern, verlangsamen und verstummen.'), nl,
         write('Depulsor wird nie wieder nach Dustfall kommen.'), nl,
         nl,
@@ -421,7 +421,7 @@ deactivate :-
         !,
         nl,
         write('Der Steuerkern hat eine leere Buchse ... irgendetwas gehört hierher.'), nl,
-        write('Du brauchst das Relikt, das du in der Wüste ausgegraben hast.'), nl,
+        write('Du brauchst das "ancient_component", das du in der Wüste ausgegraben hast.'), nl,
         increment_steps.
 deactivate :-
         write('Hier kann man nichts deaktivieren.'), nl.
@@ -503,7 +503,7 @@ look :-
 
 notice_objects_at(Place) :-
         at(X, Place),
-        write('Hier siehst du einen '), write(X), nl,
+        write('Hier siehst du einen "'), write(X), write('"'), nl,
         fail.
 notice_objects_at(_).
 
@@ -531,14 +531,14 @@ instructions :-
         write('n.  s.  e.  w.      -- in diese Richtung gehen.'), nl,
         write('in.  out.           -- ein Gebäude oder eine Struktur betreten bzw. verlassen.'), nl,
         write('look.               -- die Umgebung erneut betrachten.'), nl,
-        write('take(Object).       -- einen Gegenstand aufheben.'), nl,
+        write('take(Object).       -- einen Gegenstand ("lantern", "ancient_component", "access_key", "oil") aufheben.'), nl,
         write('drop(Object).       -- einen Gegenstand ablegen.'), nl,
         write('inventory.   (or i.)-- zeigen, was du bei dir trägst.'), nl,
-        write('talk(Who).          -- mit einem Dorfbewohner sprechen.'), nl,
-        write('buy(Object).        -- etwas kaufen (im Laden).'), nl,
+        write('talk(Who).          -- mit einem Dorfbewohner sprechen ("sheriff", "twins", "bird_person", "shopkeeper").'), nl,
+        write('buy(Object).        -- etwas kaufen (im Laden, z.B. "oil").'), nl,
         ( holding(lantern)
-        -> write('fill(lantern).      -- Öl in die Laterne füllen.'), nl,
-           write('light(lantern).     -- eine gefüllte Laterne anzünden.'), nl
+        -> write('fill(lantern).      -- "oil" in die "lantern" füllen.'), nl,
+           write('light(lantern).     -- eine gefüllte "lantern" anzünden.'), nl
         ;  true ),
         ( \+ flag(dug)
         -> write('dig.                -- an deiner aktuellen Position graben.'), nl
@@ -614,12 +614,12 @@ describe(main_street) :-
 
 describe(magic_shop) :-
         write('Ein beengter Magieladen, dessen Regale von einer dicken Staubschicht'), nl,
-        write('bedeckt sind. Der betagte Ladenbesitzer beobachtet dich hinter dem'), nl,
+        write('bedeckt sind. Der betagte Ladenbesitzer ("shopkeeper") beobachtet dich hinter dem'), nl,
         write('Tresen. Die Hauptstraße liegt im Osten.'), nl.
 
 describe(sheriff_office) :-
         write('Das Büro des Sheriffs. Ein abgenutzter Schreibtisch und ein Gestell'), nl,
-        write('mit unbenutzten Gewehren stehen hier. Der Sheriff sitzt regungslos'), nl,
+        write('mit unbenutzten Gewehren stehen hier. Der Sheriff ("sheriff") sitzt regungslos'), nl,
         write('an seinem Platz. Die Hauptstraße liegt im Westen.'), nl.
 
 describe(water_tower) :-
@@ -629,13 +629,13 @@ describe(water_tower) :-
 
 describe(residential) :-
         write('Das Wohnviertel mit notdürftig instand gehaltenen Häusern, die seit'), nl,
-        write('Generationen weitergegeben werden. Zwei junge Zwillingsmädchen'), nl,
+        write('Generationen weitergegeben werden. Zwei junge Zwillingsmädchen ("twins")'), nl,
         write('beobachten dich aus einer Türöffnung.'), nl,
         write('Der Wasserturm liegt im Osten, der alte Stall im Süden.'), nl.
 
 describe(old_stable) :-
         write('Der alte Stall, halb verlassen und erfüllt vom Geruch nach Stroh'), nl,
-        write('und Rost. In einer Ecke ruht eine gestrandete Vogelperson. Das'), nl,
+        write('und Rost. In einer Ecke ruht eine gestrandete Vogelperson ("bird_person"). Das'), nl,
         write('Wohnviertel liegt im Norden.'), nl.
 
 describe(deep_desert) :-
@@ -648,12 +648,12 @@ describe(collector_exterior) :-
         !,
         write('Du stehst vor Depulsor, einem gewaltigen Berg aus verkrusteter'), nl,
         write('Haut und Sediment, groß wie ein Hügel. Tief an seiner Flanke befindet'), nl,
-        write('sich eine eiserne Luke — dein Schlüssel passt genau hinein.'), nl,
+        write('sich eine eiserne Luke — dein "access_key" passt genau hinein.'), nl,
         write('Die Wüste liegt im Norden; die Luke führt nach in.'), nl,
         ( \+ holding(lantern)
-		->  write('(In der Luke ist es dunkel, du brauchst vielleicht eine Laterne.)'), nl
+		->  write('(In der Luke ist es dunkel, du brauchst vielleicht eine "lantern".)'), nl
 		; \+ lit(lantern)
-		->  write('(In der Luke ist es dunkel, zünde zuerst deine Laterne an.)'), nl
+		->  write('(In der Luke ist es dunkel, zünde zuerst deine "lantern" an.)'), nl
 		; true
 		).
 
@@ -665,7 +665,7 @@ describe(collector_exterior) :-
 
 describe(collector_interior) :-
         write('Du betrittst das Innere der Maschine. Uralte Mechanismen erleuchten'), nl,
-        write('durch deine Laterne, unberührt von den Jahrhunderten. Verblasste'), nl,
+        write('durch deine "lantern", unberührt von den Jahrhunderten. Verblasste'), nl,
         write('Zeichen einer Zivilisation, die längst verschwunden ist, bedecken'), nl,
         write('die Wände — Depulsor sammelt noch immer für eine Welt, die es nicht'), nl,
         write('mehr gibt. Ein schmaler Gang führt tiefer hinein; die Luke liegt out.'), nl.
@@ -673,5 +673,5 @@ describe(collector_interior) :-
 describe(control_room) :-
         write('Der Kontrollkern, eine stille Kammer voller fremdartiger Instrumente,'), nl,
         write('die noch immer schwach leben. Im Zentrum wartet eine einzelne leere'), nl,
-        write('Fassung. Die Form ähnelt dem Relikt, das du in der Wüste ausgegraben hast.'), nl,
+        write('Fassung. Die Form ähnelt dem "ancient_component", das du in der Wüste ausgegraben hast.'), nl,
         write('(out führt zurück.)'), nl.
