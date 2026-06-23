@@ -15,7 +15,7 @@ the monster comes. As the outsider, you must talk to the townsfolk, scavenge
 what the desert hides, and decide what to do before the next tribute falls due.
 
 There is more than one way for your story to end. Choose carefully — courage
-alone may not be enough, and the desert is not forgiving.
+alone may not be enough, time is running out, and the desert is not forgiving.
 
 ## How To Play
 
@@ -42,15 +42,18 @@ Start with `start.` for the intro and the full command list.
 
 The game leans on the things Prolog does best — facts and rules, recursion over
 lists, cuts, and a knowledge base rewritten at runtime with `assert`/`retract`.
-It includes all four classic adventure-puzzle types:
+It includes five core mechanics and adventure-puzzle types:
 
 - **Limited resource** — water. Crossing the desert drains your canteen (tracked
   with arithmetic); run dry out there and you won't make it back. Refill in town.
 - **Incomplete object** — a lantern is useless until you give it what it lacks
   and bring it to life. You'll want light before you go anywhere dark.
-- **Hidden object** — the desert buries its secrets. Search the right spot.
+- **Hidden object** — the desert buries its secrets. Search the right spot and
+  be persistent (you must dig once to hear a rattle, then dig again to find the component).
 - **Locked door** — one way forward is sealed tight. Earn the means to open it
   by gaining the right person's trust.
+- **Time limit** — every action takes time (steps). You must resolve the mystery
+  before 50 steps, or Depulsor will arrive in town, forcing a hopeless final battle.
 
 Talking to the townsfolk is how you learn what to do next — each has a hint, and
 one holds the key to everything.

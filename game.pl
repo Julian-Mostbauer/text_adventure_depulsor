@@ -1,11 +1,12 @@
-:- dynamic i_am_at/1, at/2, holding/1, water_level/1, lit/1, flag/1.
+:- dynamic i_am_at/1, at/2, holding/1, water_level/1, lit/1, flag/1, steps/1.
 
 :- retractall(i_am_at(_)),
    retractall(at(_, _)),
    retractall(holding(_)),
    retractall(water_level(_)),
    retractall(lit(_)),
-   retractall(flag(_)).
+   retractall(flag(_)),
+   retractall(steps(_)).
 
 
 
@@ -17,6 +18,8 @@ i_am_at(trade_road).
 water_level(3).
 
 at(lantern, old_stable).
+
+steps(0).
 
 
 path(trade_road,          n,   main_street).
@@ -76,6 +79,7 @@ take(X) :-
         ( member(X, [lantern, ancient_component])
         -> write('Neue Befehle sind jetzt verfügbar. (Gib "instructions." für Details ein.)'), nl
         ;  true ),
+        increment_steps,
         !, nl.
 
 take(_) :-
@@ -89,6 +93,7 @@ drop(X) :-
         retract(holding(X)),
         assert(at(X, Place)),
         write('OK.'),
+        increment_steps,
         !, nl.
 
 drop(_) :-
@@ -134,7 +139,8 @@ go(Direction) :-
         i_am_at(Here),
         path(Here, Direction, There),
         try_enter(Here, There),
-        !.
+        !,
+        increment_steps.
 
 go(_) :-
         write('In diese Richtung kannst du nicht gehen.'), nl.
@@ -220,7 +226,8 @@ refill :-
         !,
         retract(water_level(_)),
         assert(water_level(5)),
-        write('Du füllst deine Kantine bis kein Tropfen mehr rein passt. (Water: 5)'), nl.
+        write('Du füllst deine Kantine bis kein Tropfen mehr rein passt. (Water: 5)'), nl,
+        increment_steps.
 refill :-
         write('Du findest hier kein Trinkwasser.'), nl.
 
@@ -236,7 +243,8 @@ dig :-
         assert(flag(dig_heard)),
         nl,
         write('Du gräbst tief im heißen Sand.'), nl,
-        write('Plötzlich hörst du ein leises Rasseln von tiefer unten im Sand.'), nl.
+        write('Plötzlich hörst du ein leises Rasseln von tiefer unten im Sand.'), nl,
+        increment_steps.
 
 dig :-
         i_am_at(deep_desert),
@@ -249,7 +257,8 @@ dig :-
         write('Du gräbst noch einmal dort, wo du das Rasseln gehört hast.'), nl,
         write('Mit deinen Fingern fühlst du etwas metallisches: ein seltsames altes Maschinenteil,'), nl,
         write('Relikt und Maschine zugleich. Beweis, dass das Monster nie lebendig war.'), nl,
-        write('Du hast einen "ancient_component" vor dir.'), nl.
+        write('Du hast einen "ancient_component" vor dir.'), nl,
+        increment_steps.
 
 dig :-
         i_am_at(deep_desert),
@@ -272,7 +281,8 @@ buy(oil) :-
         !,
         assert(holding(oil)),
         write('Der Ladenbesitzer schiebt eine Flasche Lampenöl über den'), nl,
-        write('Bartresen. "Verschwende es nicht. Das war meine letzte Reserve."'), nl.
+        write('Bartresen. "Verschwende es nicht. Das war meine letzte Reserve."'), nl,
+        increment_steps.
 buy(oil) :-
         holding(oil),
         !,
@@ -291,7 +301,8 @@ fill(lantern) :-
         !,
         retract(holding(oil)),
         assert(flag(lantern_filled)),
-        write('Du füllst die Lampe mit Öl auf. Sie kann jetzt angezündet werden.'), nl.
+        write('Du füllst die Lampe mit Öl auf. Sie kann jetzt angezündet werden.'), nl,
+        increment_steps.
 fill(lantern) :-
         \+ holding(lantern),
         !,
@@ -311,7 +322,8 @@ light(lantern) :-
         flag(lantern_filled),
         !,
         assert(lit(lantern)),
-        write('Die Lampe fängt an zu brennen, du kannst ihre Wärme in deinen Händen fühlen.'), nl.
+        write('Die Lampe fängt an zu brennen, du kannst ihre Wärme in deinen Händen fühlen.'), nl,
+        increment_steps.
 light(lantern) :-
         holding(lantern),
         !,
@@ -332,7 +344,8 @@ talk(sheriff) :-
         nl,
         write('Der Sherif schaut nicht auf beim Sprechen. "Noch ein Abenteurer. Hör mir zu:'), nl,
         write('verbreite keine falsche Hoffnung. Wir zahlen unseren Anteil und nur so können wir überleben."'), nl,
-        write('"Im Kampf gegen das Biest würden wir nur Leben verschwenden. Lass es einfach seihen."'), nl.
+        write('"Im Kampf gegen das Biest würden wir nur Leben verschwenden. Lass es einfach seihen."'), nl,
+        increment_steps.
 
 talk(twins) :-
         i_am_at(residential),
@@ -341,7 +354,8 @@ talk(twins) :-
         write('Die Zwillingsmädchen mustern dich misstrauisch. "Wir sollen nicht mit'), nl,
         write('Fremden sprechen." Eines kommt etwas näher: "Aber wir haben es gehört.'), nl,
         write('Tief in der Wüste - Ein Rauschen unter dem Sand.'), nl,
-        write('Irgendwas ist dort vergraben. Du solltest danach suchen."'), nl.
+        write('Irgendwas ist dort vergraben. Du solltest danach suchen."'), nl,
+        increment_steps.
 
 talk(bird_person) :-
         i_am_at(old_stable),
@@ -349,7 +363,8 @@ talk(bird_person) :-
         nl,
         write('Der Vogelmensch faltet einen gebrochenen Flügel. "Ich bin nicht aus dieser Stadt,"'), nl,
         write('also sage ich, was sie nicht sagen werden: Dieses Ding ist kein Tier."'), nl,
-        write('"Nimm die alte Lampe hier. Du wirst Licht brauchen, wo du hingehst."'), nl.
+        write('"Nimm die alte Lampe hier. Du wirst Licht brauchen, wo du hingehst."'), nl,
+        increment_steps.
 
 
 talk(shopkeeper) :-
@@ -363,20 +378,23 @@ talk(shopkeeper) :-
         write('"Also. Du hast es gefunden. Ich war jung, als ich das letzte Mal so ein Stück selbst halten durfte."'), nl,
         write('Er drückt dir einen alten Eisenschlüssel in die Hand. "Das Biest hat eine Luke.'), nl,
         write('Das öffnet sie. Geh rein, finde den Kern und schalte das Ding ab.'), nl,
-        write('Beende, was ich damals nicht konnte." (Du hast einen "access_key" erhalten.)'), nl.
+        write('Beende, was ich damals nicht konnte." (Du hast einen "access_key" erhalten.)'), nl,
+        increment_steps.
 talk(shopkeeper) :-
         i_am_at(magic_shop),
         holding(access_key),
         !,
         nl,
-        write('"Warum bist du noch hier? Das Monster ist draußen in der Wüste. Geh."'), nl.
+        write('"Warum bist du noch hier? Das Monster ist draußen in der Wüste. Geh."'), nl,
+        increment_steps.
 talk(shopkeeper) :-
         i_am_at(magic_shop),
         !,
         nl,
         write('Der Ladenbesitzer grunzt. "Du willst die Wahrheit? Die Wüste behält es."'), nl,
         write('"Bring mir etwas Solides und du erfährst, was du wissen willst."'), nl,
-        write('"Und kauf etwas Öl, solange du hier bist. Du brauchst eine Lampe."'), nl.
+        write('"Und kauf etwas Öl, solange du hier bist. Du brauchst eine Lampe."'), nl,
+        increment_steps.
 
 talk(_) :-
         write('Gerade will Niemand mit dir reden.'), nl.
@@ -403,7 +421,8 @@ deactivate :-
         !,
         nl,
         write('Der Steuerkern hat eine leere Buchse ... irgendetwas gehört hierher.'), nl,
-        write('Du brauchst das Relikt, das du in der Wüste ausgegraben hast.'), nl.
+        write('Du brauchst das Relikt, das du in der Wüste ausgegraben hast.'), nl,
+        increment_steps.
 deactivate :-
         write('Hier kann man nichts deaktivieren.'), nl.
 
@@ -412,17 +431,65 @@ fight :-
         i_am_at(collector_exterior),
         !,
         nl,
-        write('Du motivierst die Stadtbewohner zu einem letzten Widerstand gegen das Monster.'), nl,
-        write('Stahl und Zauberfeuer prallen gegen seine uralte Haut. Doch das verlangsamt'), nl,
-        write('die Maschine nicht mal. Mut, wie sich herausstellte, war nie das fehlende Puzzlestück.'), nl,
+        write('Du stellst dich Depulsor direkt in den Weg. Mit einem Schrei ziehst du deine Waffe und'), nl,
+        write('mobilisierst die verzweifelten Bewohner von Dustfall zu einem letzten, selbstmörderischen Sturm.'), nl,
+        write('Pfeile, Kugeln und glühendes Zauberfeuer prallen in einem ohrenbetäubenden Aufprall'), nl,
+        write('gegen seine tonnenschwere, verkrustete Haut aus Sediment und Stein. Doch der gigantische Koloss schreitet einfach voran.'), nl,
+        write('Keine deiner Attacken hinterlässt auch nur einen Kratzer auf der uralten Bestie.'), nl,
+        write('Mit einem dumpfen, mahlenden Grollen hebt sich ein gigantischer Fuß des Ungetüms.'), nl,
+        write('Ein Schatten legt sich über dich, bevor Tonnen aus hartem Gestein und Erde auf dich niederkrachen.'), nl,
+        write('Deine Knochen zersplittern unter dem unvorstellbaren Druck. Das Letzte, was du hörst, ist das dumpfe,'), nl,
+        write('gleichgültige Grollen des Monsters, das dein Leben einfach im Vorbeigehen zerquetschen.'), nl,
         die.
 fight :-
         write('Hier kannst du nicht kämpfen.'), nl.
 
+forced_fight :-
+        nl,
+        write('Der gigantische Koloss — Depulsor — bricht mit ohrenbetäubendem Lärm durch die Grenzen von Dustfall.'), nl,
+        write('Häuser zerbersten wie Streichhölzer unter seinen gewaltigen Schritten. Du stellst dich dem gigantischen Ungetüm'), nl,
+        write('todesmutig in den Weg, ziehst deine Waffe und stürzt dich in den ungleichen Kampf.'), nl,
+        write('Mit aller Kraft schlägst du auf die dicke Kruste seines Körpers ein, doch deine Angriffe hinterlassen'), nl,
+        write('nicht einmal einen Kratzer auf dem uralten, steinernen Panzer aus Sediment.'), nl,
+        write('Ein wuchtiges Bein des Kolosses fegt dich mit brutaler Leichtigkeit beiseite. Du fliegst durch die Luft'), nl,
+        write('und prallst hart gegen die Ruinen eines eingestürzten Hauses. Deine Knochen zersplittern, heiße Schmerzen durchzucken dich.'), nl,
+        write('Während dir das Blut in die Augen steigt und du verzweifelt nach Luft ringst, schreitet Depulsor ungerührt voran.'), nl,
+        write('Er begräbt dich und die schreiende Stadt unter Tonnen von brennendem Trümmerfeld und erstickendem Wüstensand.'), nl,
+        write('Dein Blick wird dunkel, während das monotone, ferne Grollen des Ungetüms dein Ende besiegelt.'), nl,
+        die.
 
+increment_steps :-
+        steps(S),
+        NewS is S + 1,
+        retract(steps(S)),
+        assert(steps(NewS)),
+        check_step_limit.
 
-
-
+check_step_limit :-
+        steps(S),
+        S >= 50,
+        !,
+        nl,
+        write('=== DIE ZEIT IST ABGELAUFEN ==='), nl,
+        write('Ein gewaltiges, dumpfes Dröhnen erschüttert die Erde.'), nl,
+        write('Der Himmel verdunkelt sich, als sich Depulsor — der gigantische Koloss —'), nl,
+        write('aus den Dünen erhebt. Er kommt, um seinen gnadenlosen Tribut einzufordern.'), nl,
+        write('Es gibt kein Entkommen mehr. Inmitten von Panik und Schreien stellst du dich'), nl,
+        write('dem furchterregenden Ungeheuer entgegen...'), nl,
+        forced_fight.
+check_step_limit :-
+        steps(S),
+        S == 40,
+        !,
+        nl,
+        write('(WARNUNG: Der Wind weht unruhiger. Die Stadtbewohner tuscheln nervös. Der Tag des Tributs rückt näher...)'), nl.
+check_step_limit :-
+        steps(S),
+        S == 45,
+        !,
+        nl,
+        write('(WARNUNG: Der Wüstensand bebt leicht. Die Zeit wird extrem knapp. Depulsor wird bald eintreffen!)'), nl.
+check_step_limit.
 
 look :-
         i_am_at(Place),
@@ -437,14 +504,10 @@ notice_objects_at(Place) :-
         fail.
 notice_objects_at(_).
 
-
-
-
-
-
 die :-
         nl,
-        write('*** Tod ***'), nl,
+        write('*** DEIN ABENTEUER ENDET HIER IM STAUB ***'), nl,
+        write('Die Wüste nimmt sich, was ihr gehört. Deine Geschichte verweht im heißen Wind...'), nl,
         finish.
 
 finish :-

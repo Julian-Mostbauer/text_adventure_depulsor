@@ -68,26 +68,27 @@ Keep your canteen topped up before each desert crossing.
 | 17 | `s.` | main_street |
 | 18 | `s.` | trade_road |
 | 19 | `s.` | deep_desert (water 5→4) |
-| 20 | `dig.` | reveals the ancient_component |
-| 21 | `take(ancient_component).` | get component |
-| 22 | `n.` | trade_road |
-| 23 | `n.` | main_street |
-| 24 | `w.` | magic_shop |
-| 25 | `talk(shopkeeper).` | get the access_key |
-| 26 | `e.` | main_street |
-| 27 | `s.` | trade_road |
-| 28 | `s.` | deep_desert (water 4→3) |
-| 29 | `s.` | collector_exterior (water 3→2) |
-| 30 | `in.` | hatch opens (have key); interior — survive because lit |
-| 31 | `in.` | control_room |
-| 32 | `deactivate.` | **YOU FREED DUSTFALL** — true ending |
+| 20 | `dig.` | hear a faint rattling sound from deeper in the sand |
+| 21 | `dig.` | reveals the ancient_component |
+| 22 | `take(ancient_component).` | get component |
+| 23 | `n.` | trade_road |
+| 24 | `n.` | main_street |
+| 25 | `w.` | magic_shop |
+| 26 | `talk(shopkeeper).` | get the access_key |
+| 27 | `e.` | main_street |
+| 28 | `s.` | trade_road |
+| 29 | `s.` | deep_desert (water 4→3) |
+| 30 | `s.` | collector_exterior (water 3→2) |
+| 31 | `in.` | hatch opens (have key); interior — survive because lit |
+| 32 | `in.` | control_room |
+| 33 | `deactivate.` | **YOU FREED DUSTFALL** — true ending |
 
 One-liner to replay non-interactively:
 
 ```sh
 swipl -q -g "start, n, w, buy(oil), e, n, refill, w, talk(twins), s, \
 take(lantern), talk(bird_person), fill(lantern), light(lantern), n, e, s, s, s, \
-dig, take(ancient_component), n, n, w, talk(shopkeeper), e, s, s, s, in, in, \
+dig, dig, take(ancient_component), n, n, w, talk(shopkeeper), e, s, s, s, in, in, \
 deactivate, halt" game.pl
 ```
 
@@ -102,7 +103,7 @@ On the last `s.` water is 0 → "Your canteen is bone dry..." → game over.
 **Death — darkness.** Reach the interior without a lit lantern. Get the key but
 skip the lantern:
 ```prolog
-start. s. dig. take(ancient_component). n. n. w. talk(shopkeeper).
+start. s. dig. dig. take(ancient_component). n. n. w. talk(shopkeeper).
 e. s. s. s. in.
 ```
 The `in.` into the unlit interior → "It is pitch black..." → game over.
@@ -111,7 +112,13 @@ The `in.` into the unlit interior → "It is pitch black..." → game over.
 ```prolog
 start. s. s. fight.
 ```
-→ "Courage... was never the missing piece." → game over.
+→ "...gleichgültige Grollen des Monsters, das dein Leben einfach im Vorbeigehen zerquetschen." → game over.
+
+**Failure — forced fight (time limit).** Take 50 actions without deactivating the machine:
+```prolog
+?- forall(between(1, 25, _), (n, s)).
+```
+→ Warnings at 40 and 45 steps. On the 50th step → "=== DIE ZEIT IST ABGELAUFEN ===" → forced fight with the colossus and death → game over.
 
 ## Edge Cases / Negative Checks
 
@@ -128,13 +135,14 @@ start. s. s. fight.
 
 ## Puzzle / Requirement Checklist
 
-- [ ] **Limited resource** — water drains in desert (steps 19, 28, 29); 0 → death
+- [ ] **Limited resource** — water drains in desert (steps 19, 29, 30); 0 → death
 - [ ] **Incomplete object** — lantern needs oil → `fill` → `light` (steps 4, 13, 14)
-- [ ] **Hidden object** — `dig` reveals component (step 20)
-- [ ] **Locked door** — hatch needs access_key (steps 25, 30)
+- [ ] **Hidden object** — `dig` twice to find component (steps 20, 21)
+- [ ] **Locked door** — hatch needs access_key (steps 26, 31)
+- [ ] **Time limit** — 50-step limit triggers warnings (at 40 and 45 steps) and forced fight ending (at 50 steps)
 - [ ] **start/0** — shows command overview
 - [ ] **inventory/0** — lists holdings
-- [ ] Three endings reachable (true / last stand / death)
+- [ ] Four endings reachable (true / last stand / death / forced fight)
 
 ## Reset
 
