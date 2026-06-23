@@ -231,12 +231,22 @@ refill :-
 
 dig :-
         i_am_at(deep_desert),
+        \+ flag(dig_heard),
+        !,
+        assert(flag(dig_heard)),
+        nl,
+        write('Du gräbst tief im heißen Sand.'), nl,
+        write('Plötzlich hörst du ein leises Rasseln von tiefer unten im Sand.'), nl.
+
+dig :-
+        i_am_at(deep_desert),
+        flag(dig_heard),
         \+ flag(dug),
         !,
         assert(flag(dug)),
         assert(at(ancient_component, deep_desert)),
         nl,
-        write('Du gräbst dort, wo der Wind die Düne weggetragen hat.'), nl,
+        write('Du gräbst noch einmal dort, wo du das Rasseln gehört hast.'), nl,
         write('Mit deinen Fingern fühlst du etwas metallisches: ein seltsames altes Maschinenteil,'), nl,
         write('Relikt und Maschine zugleich. Beweis, dass das Monster nie lebendig war.'), nl,
         write('Du hast einen "ancient_component" vor dir.'), nl.
@@ -564,10 +574,8 @@ describe(old_stable) :-
 
 describe(deep_desert) :-
         write('Die tiefe Wüste. Der Wind krallt sich in die Dünen und formt sie'), nl,
-        write('von Stunde zu Stunde neu. Unter dem Sand glaubst du ein leises'), nl,
-        write('Rauschen zu hören — alte Geschichten sagen, hier liege etwas'), nl,
-        write('begraben. Die Stadt liegt im Norden; weiter südlich zeichnet sich'), nl,
-        write('eine dunkle Silhouette ab.'), nl.
+        write('von Stunde zu Stunde neu. Die Stadt liegt im Norden; weiter südlich'), nl,
+        write('zeichnet sich eine dunkle Silhouette ab.'), nl.
 
 describe(collector_exterior) :-
         holding(access_key),
