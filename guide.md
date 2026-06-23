@@ -114,11 +114,11 @@ start. s. s. fight.
 ```
 → "...gleichgültige Grollen des Monsters, das dein Leben einfach im Vorbeigehen zerquetschen." → game over.
 
-**Failure — forced fight (time limit).** Take 50 actions without deactivating the machine:
+**Failure — forced fight (time limit).** Take 70 actions without deactivating the machine or obtaining the access key:
 ```prolog
-?- forall(between(1, 25, _), (n, s)).
+?- forall(between(1, 35, _), (n, s)).
 ```
-→ Warnings at 40 and 45 steps. On the 50th step → "=== DIE ZEIT IST ABGELAUFEN ===" → forced fight with the colossus and death → game over.
+→ Warnings at 50 and 60 steps. On the 70th step → "=== DIE ZEIT IST ABGELAUFEN ===" → forced fight with the colossus and death → game over.
 
 ## Edge Cases / Negative Checks
 
@@ -139,7 +139,7 @@ start. s. s. fight.
 - [ ] **Incomplete object** — lantern needs oil → `fill` → `light` (steps 4, 13, 14)
 - [ ] **Hidden object** — `dig` twice to find component (steps 20, 21)
 - [ ] **Locked door** — hatch needs access_key (steps 26, 31)
-- [ ] **Time limit** — 50-step limit triggers warnings (at 40 and 45 steps) and forced fight ending (at 50 steps)
+- [ ] **Time limit** — 70-step limit triggers warnings (at 50 and 60 steps) and forced fight ending (at 70 steps) unless access_key is obtained
 - [ ] **start/0** — shows command overview
 - [ ] **inventory/0** — lists holdings
 - [ ] Four endings reachable (true / last stand / death / forced fight)

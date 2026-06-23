@@ -52,8 +52,7 @@ It includes five core mechanics and adventure-puzzle types:
   be persistent (you must dig once to hear a rattle, then dig again to find the component).
 - **Locked door** — one way forward is sealed tight. Earn the means to open it
   by gaining the right person's trust.
-- **Time limit** — every action takes time (steps). You must resolve the mystery
-  before 50 steps, or Depulsor will arrive in town, forcing a hopeless final battle.
+- **Time limit** — every action takes time (steps). You must resolve the mystery (by obtaining the access key) before 70 steps, or Depulsor will arrive in town, forcing a hopeless final battle.
 
 Talking to the townsfolk is how you learn what to do next — each has a hint, and
 one holds the key to everything.

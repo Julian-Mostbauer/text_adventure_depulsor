@@ -466,8 +466,11 @@ increment_steps :-
         check_step_limit.
 
 check_step_limit :-
+        holding(access_key),
+        !.
+check_step_limit :-
         steps(S),
-        S >= 50,
+        S >= 70,
         !,
         nl,
         write('=== DIE ZEIT IST ABGELAUFEN ==='), nl,
@@ -479,13 +482,13 @@ check_step_limit :-
         forced_fight.
 check_step_limit :-
         steps(S),
-        S == 40,
+        S == 50,
         !,
         nl,
         write('(WARNUNG: Der Wind weht unruhiger. Die Stadtbewohner tuscheln nervös. Der Tag des Tributs rückt näher...)'), nl.
 check_step_limit :-
         steps(S),
-        S == 45,
+        S == 60,
         !,
         nl,
         write('(WARNUNG: Der Wüstensand bebt leicht. Die Zeit wird extrem knapp. Depulsor wird bald eintreffen!)'), nl.
